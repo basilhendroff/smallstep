@@ -11,7 +11,7 @@
 # step_ca_user (user):          User to run step_ca (root)
 # step_ca_group (group):        Group to run step_ca (wheel)
 # step_ca_stepdir (dir):        Root for step-ca storage
-#                               (/var/db/step-ca)
+#                               (/var/db/step_ca)
 # step_ca_steppath (dir):       Path for data and configs
 #                               (${step_ca_stepdir}/ca)
 # step_ca_password (path):      Password file path
