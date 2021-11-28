@@ -104,13 +104,16 @@ rm /tmp/pkg.json
 
 iocage exec "${JAIL_NAME}" mkdir -p /mnt/includes
 
-iocage fstab -a "${JAIL_NAME}" "${DATA_PATH}" /var/db/smallstep nullfs rw 0 0
+iocage fstab -a "${JAIL_NAME}" "${DATA_PATH}" /var/db/step_ca nullfs rw 0 0
 iocage fstab -a "${JAIL_NAME}" "${INCLUDES_PATH}" /mnt/includes nullfs rw 0 0
 
 # Copy pre-written config files
 iocage exec "${JAIL_NAME}" cp /mnt/includes/step-ca /usr/local/etc/rc.d/
 
-iocage exec "${JAIL_NAME}" sysrc caddy_enable="YES"
+iocage exec "${JAIL_NAME}" sysrc step_ca_enable="YES"
+
+# Set up the STEPPATH environmental variable
+iocage exec "${JAIL_NAME}" echo "setenv STEPPATH /var/db/step_ca/ca" >> /etc/csh.cshrc
 
 iocage restart "${JAIL_NAME}"
 
