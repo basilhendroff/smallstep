@@ -1,6 +1,6 @@
 #!/bin/sh
-# Build an iocage jail under FreeNAS 11.3-12.0 using the current release of Caddy
-# git clone https://github.com/danb35/freenas-iocage-caddy
+# Build an iocage jail under TrueNAS 12.0 using the current package release of SmallStep
+# git clone https://github.com/basilhendroff/truenas-iocage-smallstep
 
 # Check for root privileges
 if ! [ $(id -u) = 0 ]; then
@@ -21,12 +21,12 @@ DEFAULT_GW_IP=""
 INTERFACE="vnet0"
 VNET="on"
 POOL_PATH=""
-CONFIG_PATH=""
-JAIL_NAME="caddy"
+DATA_PATH=""
+JAIL_NAME="smallstep"
 DNS_PLUGIN=""
-CONFIG_NAME="caddy-config"
+CONFIG_NAME="smallstep-config"
 
-# Check for caddy-config and set configuration
+# Check for smallstep-config and set configuration
 SCRIPT=$(readlink -f "$0")
 SCRIPTPATH=$(dirname "${SCRIPT}")
 if ! [ -e "${SCRIPTPATH}"/"${CONFIG_NAME}" ]; then
@@ -39,7 +39,7 @@ INCLUDES_PATH="${SCRIPTPATH}"/includes
 JAILS_MOUNT=$(zfs get -H -o value mountpoint $(iocage get -p)/iocage)
 RELEASE=$(freebsd-version | cut -d - -f -1)"-RELEASE"
 
-# Check that necessary variables were set by nextcloud-config
+# Check that necessary variables were set by smallstep-config
 if [ -z "${JAIL_IP}" ]; then
   echo 'Configuration error: JAIL_IP must be set'
   exit 1
@@ -56,9 +56,9 @@ if [ -z "${POOL_PATH}" ]; then
   echo 'Configuration error: POOL_PATH must be set'
   exit 1
 fi
-# If CONFIG_PATH wasn't set in caddy-config, set it
-if [ -z "${CONFIG_PATH}" ]; then
-  CONFIG_PATH="${POOL_PATH}"/apps/caddy
+# If DATA_PATH wasn't set in smallstep-config, set it
+if [ -z "${DATA_PATH}" ]; then
+  DATA_PATH="${POOL_PATH}"/apps/smallstep
 fi
 
 # Extract IP and netmask, sanity check netmask
@@ -83,7 +83,7 @@ fi
 cat <<__EOF__ >/tmp/pkg.json
 	{
   "pkgs":[
-  "nano","bash","go","git"
+  "step-certificates"
   ]
 }
 __EOF__
@@ -102,48 +102,15 @@ rm /tmp/pkg.json
 #
 #####
 
-mkdir -p "${CONFIG_PATH}"
-
 iocage exec "${JAIL_NAME}" mkdir -p /mnt/includes
-iocage exec "${JAIL_NAME}" mkdir -p /usr/local/www
 
-iocage fstab -a "${JAIL_NAME}" "${CONFIG_PATH}" /usr/local/www nullfs rw 0 0
+iocage fstab -a "${JAIL_NAME}" "${DATA_PATH}" /var/db/smallstep nullfs rw 0 0
 iocage fstab -a "${JAIL_NAME}" "${INCLUDES_PATH}" /mnt/includes nullfs rw 0 0
 
-#####
-#
-# Additional Dependency installation
-#
-#####
-
-# Build xcaddy, use it to build Caddy
-if ! iocage exec "${JAIL_NAME}" "go install github.com/caddyserver/xcaddy/cmd/xcaddy@latest"
-then
-  echo "Failed to install xcaddy, terminating."
-  exit 1
-fi
-iocage exec "${JAIL_NAME}" mv /root/go/bin/xcaddy /usr/local/bin/xcaddy
-if [ -n "${DNS_PLUGIN}" ]; then
-  if ! iocage exec "${JAIL_NAME}" xcaddy build --output /usr/local/bin/caddy --with github.com/caddy-dns/"${DNS_PLUGIN}"
-  then
-    echo "Failed to build Caddy with ${DNS_PLUGIN} plugin, terminating."
-    exit 1
-  fi  
-else
-  if ! iocage exec "${JAIL_NAME}" xcaddy build --output /usr/local/bin/caddy
-  then
-    echo "Failed to build Caddy without plugin, terminating."
-    exit 1
-  fi  
-fi
-
 # Copy pre-written config files
-iocage exec "${JAIL_NAME}" cp /mnt/includes/caddy /usr/local/etc/rc.d/
-iocage exec "${JAIL_NAME}" cp /mnt/includes/Caddyfile.example /usr/local/www/
-iocage exec "${JAIL_NAME}" cp -n /mnt/includes/Caddyfile /usr/local/www/ 2>/dev/null
+iocage exec "${JAIL_NAME}" cp /mnt/includes/step-ca /usr/local/etc/rc.d/
 
 iocage exec "${JAIL_NAME}" sysrc caddy_enable="YES"
-iocage exec "${JAIL_NAME}" sysrc caddy_config="/usr/local/www/Caddyfile"
 
 iocage restart "${JAIL_NAME}"
 
