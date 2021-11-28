@@ -24,7 +24,7 @@ POOL_PATH=""
 JAIL_NAME="smallstep"
 CONFIG_NAME="smallstep-config"
 DATA_PATH=""
-STEPPATH=""
+STEP_PATH=""
 
 SCRIPT=$(readlink -f "$0")
 SCRIPTPATH=$(dirname "${SCRIPT}")
@@ -64,23 +64,23 @@ if [ -z "${POOL_PATH}" ]; then
   echo 'POOL_PATH defaulting to '$POOL_PATH
 fi
 
-# # If DATA_PATH and STEPPATH weren't set in smallstep-config, set them
+# # If DATA_PATH and STEP_PATH weren't set in smallstep-config, set them
 if [ -z "${DATA_PATH}" ]; then
   DATA_PATH="${POOL_PATH}"/apps/smallstep/
 fi
-if [ -z "${STEPPATH}" ]; then
-  STEPPATH="${DATA_PATH}"/ca
+if [ -z "${STEP_PATH}" ]; then
+  STEP_PATH="${DATA_PATH}"/ca
 fi
 
-# Sanity check DATA_PATH and STEPPATH -- they have to be different and can't be the same as POOL_PATH
-if [ "${STEPPATH}" = "${DATA_PATH}" ]
+# Sanity check DATA_PATH and STEP_PATH -- they have to be different and can't be the same as POOL_PATH
+if [ "${STEP_PATH}" = "${DATA_PATH}" ]
 then
-  echo "STEPPATH and DATA_PATH must be different!"
+  echo "STEP_PATH and DATA_PATH must be different!"
   exit 1
 fi
-if [ "${DATA_PATH}" = "${POOL_PATH}" ] || [ "${STEPPATH}" = "${POOL_PATH}" ]
+if [ "${DATA_PATH}" = "${POOL_PATH}" ] || [ "${STEP_PATH}" = "${POOL_PATH}" ]
 then
-  echo "DATA_PATH and STEPPATH must all be different from POOL_PATH!"
+  echo "DATA_PATH and STEP_PATH must all be different from POOL_PATH!"
   exit 1
 fi
 
