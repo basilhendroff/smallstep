@@ -1,12 +1,12 @@
 # truenas-iocage-smallstep
-This script will create an iocage jail on TrueNAS CORE 12.0 with the latest SmallStep release.
+This script will create an iocage jail on TrueNAS CORE 12.0 with the latest Smallstep release.
 ## Status
 This script will work with TrueNAS CORE 12.0. It's designed to operate on FreeBSD 12.2 or later, which uses [certctl](https://www.freebsd.org/cgi/man.cgi?query=certctl&apropos=0&sektion=0&manpath=FreeBSD+11.4-stable&arch=default&format=html) to manage the local trust store.
 ## Usage
-Use SmallStep for complete certificate lifecycle managment on the local network (private PKI). It can manage private TLS/SSL certificates for internal workloads, devices and people. Smallstep supports the ACME protocol, single sign-on, one-time tokens, VM APIs, and other methods for automating certificates.
+Use Smallstep for complete certificate lifecycle managment on the local network (private PKI). It can manage private TLS/SSL certificates for internal workloads, devices and people. Smallstep supports the ACME protocol, single sign-on, one-time tokens, VM APIs, and other methods for automating certificates.
 
-This script enhances the environment the `step-certificates`sets up in the following manner:
-1. The modified rc script sets up the environment to run `step-ca`, but does not attempt to initialise the CA.
+This script enhances the environment the `step-certificates` package sets up. It does so in the following manner:
+1. The modified rc script used sets up the environment to run `step-ca`, but does not attempt to initialise the Step CA.
 2. The CA must be initialised and a password saved before `step-ca` can be enabled. This is handled by the rc `required_files` parameter.
 3. To make the use of low order port 443 possible, root:wheel are set as the owner:group of `step-ca`. 
 4. Sets up the STEPPATH enviromental variable in th jail shell.
@@ -38,5 +38,8 @@ In addition, there are some other options which have sensible defaults, but can 
 
 ### Execution
 
-Once you've downloaded the script and prepared the configuration file, run this script (`./smallstep-jail.sh`). The script will run for several minutes. When it finishes, your jail will be created and SmallStep will be installed.
+Once you've downloaded the script and prepared the configuration file, run this script (`./smallstep-jail.sh`). The script will run for several minutes. When it finishes, your jail will be created and Smallstep will be installed.
 
+### Where to from here?
+
+Note: Wherever you see $(STEP PATH) used in the Smallstep guides, replace it with ${STEPPATH}. 
