@@ -32,9 +32,11 @@ Many of the options are self-explanatory, and all should be adjusted to suit you
 In addition, there are some other options which have sensible defaults, but can be adjusted if needed. These are:
 
 - JAIL_NAME: The name of the jail, defaults to "smallstep"
-- DATA_PATH: This is the path for SmallStep data storage, defaults to `$POOL_PATH/apps/smallstep`. It is mounted inside the jail at `/var/db/step_ca`. 
+- DATA_PATH: This is the path for SmallStep configuration and storage, defaults to `$POOL_PATH/apps/smallstep`. 
 - INTERFACE: The network interface to use for the jail. Defaults to `vnet0`.
 - VNET: Whether to use the iocage virtual network stack. Defaults to `on`.
+
+Smallstep will store public certificates, private keys, and other assets outside the jail at `$POOL_PATH/apps/smallstep/storage`. This is mounted inside the jail at `/var/db/step_ca`. 
 
 ### Execution
 
