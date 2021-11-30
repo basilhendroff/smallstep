@@ -53,8 +53,8 @@ if [ -z "${DEFAULT_GW_IP}" ]; then
   exit 1
 fi
 if [ -z "${POOL_PATH}" ]; then
-  echo 'Configuration error: POOL_PATH must be set'
-  exit 1
+  POOL_PATH="/mnt/$(iocage get -p)"
+  echo 'POOL_PATH defaulting to '$POOL_PATH
 fi
 # If DATA_PATH wasn't set in smallstep-config, set it
 if [ -z "${DATA_PATH}" ]; then
@@ -78,7 +78,7 @@ if [ ${DATA_PATH:0:1} != "/" ]; then
 fi
 DATA_PATH="${DATA_PATH%/}"
 
-DB_PATH=${POOL_PATH}${DATA_PATH}/storage
+DB_PATH=${DATA_PATH}/storage
 
 
 #####
