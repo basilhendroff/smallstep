@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # Build an iocage jail under TrueNAS 12.0 using the current package release of SmallStep
 # git clone https://github.com/basilhendroff/truenas-iocage-smallstep
 
@@ -110,6 +110,7 @@ rm /tmp/pkg.json
 #
 #####
 mkdir -p "${DB_PATH}"
+iocage exec "${JAIL_NAME}" mkdir -p /var/db/step_ca
 iocage fstab -a "${JAIL_NAME}" "${DB_PATH}"  /var/db/step_ca  nullfs  rw  0  0
 
 iocage exec "${JAIL_NAME}" mkdir -p /mnt/includes
