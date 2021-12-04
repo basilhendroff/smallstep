@@ -43,4 +43,4 @@ Once you've downloaded the script and prepared the configuration file, run this 
 
 ### Where to from here?
 
-Note: Wherever you see $(STEP PATH) used in the Smallstep guides, replace it with ${STEPPATH}. 
+Note: Wherever you see `$(STEP PATH)` used in the Smallstep guides, replace it with `${STEPPATH}`. 
