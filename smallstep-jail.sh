@@ -60,6 +60,10 @@ fi
 if [ -z "${DATA_PATH}" ]; then
   DATA_PATH="${POOL_PATH}"/apps/smallstep
 fi
+if [ "${DATA_PATH}" = "${POOL_PATH}" ]; then
+  echo "DATA_PATH must be different from POOL_PATH!"
+  exit 1
+fi
 
 # Extract IP and netmask, sanity check netmask
 IP=$(echo ${JAIL_IP} | cut -f1 -d/)
