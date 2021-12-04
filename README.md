@@ -15,7 +15,7 @@ This script enhances the environment the `step-certificates` package sets up. It
 Although not required, it's recommended to create a Dataset named `apps` with a sub-dataset named `smallstep` on your main storage pool.  Many other jail guides also store their configuration and data in subdirectories of `pool/apps/` If this dataset is not present, a directory `/apps/smallstep` will be created in `$POOL_PATH`.
 ### Installation
 
-Download the repository to a convenient directory on your TrueNAS/FreeNAS system by changing to that directory and running `git clone https://github.com/basilhendroff/truenas-iocage-smallstep`. Then change into the new truenas-iocage-smallstep directory and create a file called `smallstep-config` with your favorite text editor. In its minimal form, it would look like this:
+Download the repository to a convenient directory on your TrueNAS system by changing to that directory and running `git clone https://github.com/basilhendroff/truenas-iocage-smallstep`. Then change into the new truenas-iocage-smallstep directory and create a file called `smallstep-config` with your favorite text editor. In its minimal form, it would look like this:
 
 ```
 JAIL_IP="192.168.1.199"
@@ -40,6 +40,10 @@ Smallstep will store public certificates, private keys, and other assets outside
 ### Execution
 
 Once you've downloaded the script and prepared the configuration file, run this script (`./smallstep-jail.sh`). The script will run for several minutes. When it finishes, your jail will be created and Smallstep will be installed.
+
+### Testing
+
+
 
 ### Where to from here?
 
