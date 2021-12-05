@@ -5,12 +5,13 @@ This script will work with TrueNAS CORE 12.0. It's designed to operate on FreeBS
 ## Usage
 Use Smallstep for complete certificate lifecycle managment on the local network (private PKI). It can manage private TLS/SSL certificates for internal workloads, devices and people. Smallstep supports the ACME protocol, single sign-on, one-time tokens, VM APIs, and other methods for automating certificates.
 
-This script enhances `step-certificates` environment and establishes some best practices as follows:
-1. It runs the `step-certificates` package within a jail, but modifies the package behaviour: 
-   - The modified rc script that's used sets up the environment to run `step-ca`, but does not attempt to initialise the Step CA.
-   - The CA must be initialised and a password saved before `step-ca` can be enabled. This is handled by the rc `required_files` parameter.
-   - To make the use of low order port 443 possible, root:wheel are set as the owner:group of `step-ca`. 
-2. Sets up the STEPPATH enviromental variable in th jail shell.
+This script enhances the SmallStep environment and establishes some best practices as follows:
+1. It runs the `step-certificates` package within a jail to enable the following behaviour: 
+   - Modular operation - It uses a modified rc script to separate set up of the `step-ca` jail environment from initialisation of the Smallstep CA.
+   - Sequenced operation - The CA must be initialised and a password saved before `step-ca` can be enabled. This is handled by the rc `required_files` parameter.
+   - root:wheel are set as the owner:group of `step-ca` to allow the use of low order port 443.
+   - It uses the local trust store of the jail rather than the TrueNAS systemwide trust store.  
+2. Sets up the STEPPATH enviromental variable in the jail shell.
 3. Stores public certificates, private keys and other assets outside the jail.
 
 ### Prerequisites
@@ -37,7 +38,7 @@ In addition, there are some other options which have sensible defaults, but can 
 - INTERFACE: The network interface to use for the jail. Defaults to `vnet0`.
 - VNET: Whether to use the iocage virtual network stack. Defaults to `on`.
 
-Smallstep will store public certificates, private keys, and other assets outside the jail at `$POOL_PATH/apps/smallstep/storage`. This is mounted inside the jail at `/var/db/step_ca`. 
+Smallstep will store public certificates, private keys, and other assets outside the jail at `$POOL_PATH/apps/smallstep/assets`. This is mounted inside the jail at `/var/db/step_ca`. 
 
 ### Execution
 
