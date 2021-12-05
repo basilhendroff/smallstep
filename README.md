@@ -7,9 +7,9 @@ Use Smallstep for complete certificate lifecycle managment on the local network 
 
 This script enhances `step-certificates` environment and establishes some best practices as follows:
 1. It runs the `step-certificates` package within a jail, but modifies the package behaviour: 
- - The modified rc script that's used sets up the environment to run `step-ca`, but does not attempt to initialise the Step CA.
- - The CA must be initialised and a password saved before `step-ca` can be enabled. This is handled by the rc `required_files` parameter.
- - To make the use of low order port 443 possible, root:wheel are set as the owner:group of `step-ca`. 
+   - The modified rc script that's used sets up the environment to run `step-ca`, but does not attempt to initialise the Step CA.
+   - The CA must be initialised and a password saved before `step-ca` can be enabled. This is handled by the rc `required_files` parameter.
+   - To make the use of low order port 443 possible, root:wheel are set as the owner:group of `step-ca`. 
 2. Sets up the STEPPATH enviromental variable in th jail shell.
 3. Stores public certificates, private keys and other assets outside the jail.
 
