@@ -58,6 +58,7 @@ if [ -z "${POOL_PATH}" ]; then
 fi
 # If DATA_PATH wasn't set in smallstep-config, set it
 if [ -z "${DATA_PATH}" ]; then
+  POOL_PATH="${POOL_PATH%/}"
   DATA_PATH="${POOL_PATH}"/apps/smallstep
 fi
 if [ "${DATA_PATH}" = "${POOL_PATH}" ]; then
