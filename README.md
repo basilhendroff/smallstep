@@ -6,8 +6,8 @@ This script will work with TrueNAS CORE 12.0. It's designed to operate on FreeBS
 Use Smallstep for complete certificate lifecycle managment on the local network (private PKI). It can manage private TLS/SSL certificates for internal workloads, devices and people. Smallstep supports the ACME protocol, single sign-on, one-time tokens, VM APIs, and other methods for automating certificates.
 
 This script enhances `step-certificates` environment and establishes some best practices as follows:
-1. It runs the `step-certificates` package within a jail, but modifies the package behaviour: 
- 1.1 The modified rc script that's used sets up the environment to run `step-ca`, but does not attempt to initialise the Step CA.
+1. It runs the `step-certificates` package within a jail, but modifies the package behaviour:
+1.1 The modified rc script that's used sets up the environment to run `step-ca`, but does not attempt to initialise the Step CA.
 2. The CA must be initialised and a password saved before `step-ca` can be enabled. This is handled by the rc `required_files` parameter.
 3. To make the use of low order port 443 possible, root:wheel are set as the owner:group of `step-ca`. 
 4. Sets up the STEPPATH enviromental variable in th jail shell.
