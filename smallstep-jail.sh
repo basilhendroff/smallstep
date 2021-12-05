@@ -8,9 +8,7 @@ if ! [ $(id -u) = 0 ]; then
    exit 1
 fi
 print_msg () {
-  echo
   echo -e "\e[1;32m"$1"\e[0m"
-  echo
 }
 
 #####
@@ -138,8 +136,10 @@ iocage exec "${JAIL_NAME}" echo "setenv STEPPATH /var/db/step_ca/ca" >> /etc/csh
 
 # Don't need /mnt/includes any more, so unmount it
 iocage fstab -r "${JAIL_NAME}" "${INCLUDES_PATH}" /mnt/includes nullfs rw 0 0
-print_msg ""
+
+echo
 print_msg "Ignore comments between the dashed lines above."
-print_msg "The step-ca service runs as root:wheel."
-print_msg "CA assets are stored in ${DB_PATH}/ca"
-print_msg "The password required for the service to start is stored in ${DB_PATH}"
+echo
+print_msg "* The step-ca service runs as root:wheel."
+print_msg "* CA assets are stored in ${DB_PATH}/ca"
+print_msg "* The password required for the service to start is stored in ${DB_PATH}"
