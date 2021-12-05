@@ -35,11 +35,9 @@ In addition, there are some other options which have sensible defaults, but can 
 
 - JAIL_NAME: The name of the jail, defaults to `smallstep`.
 - POOL_PATH: The path for your data pool. It is set automatically if left blank.
-- DATA_PATH: This is the path for SmallStep configuration and storage, defaults to `$POOL_PATH/apps/smallstep`. 
+- DATA_PATH: This is the path for SmallStep configuration and storage, defaults to `$POOL_PATH/apps/smallstep`. This is mounted inside the jail at `/var/db/step_ca`. 
 - INTERFACE: The network interface to use for the jail. Defaults to `vnet0`.
 - VNET: Whether to use the iocage virtual network stack. Defaults to `on`.
-
-Smallstep will store public certificates, private keys, and other assets outside the jail at `$POOL_PATH/apps/smallstep/assets`. This is mounted inside the jail at `/var/db/step_ca`. 
 
 ### Execution
 
@@ -47,7 +45,15 @@ Once you've downloaded the script and prepared the configuration file, run this 
 
 ### Testing
 
-
+Enter the jail and check the version of step and step-ca.
+```
+root@smallstep:~ # step-ca -version
+Smallstep CA/0.17.2 (freebsd/amd64)
+Release Date: 2021-12-05 02:24 UTC
+root@smallstep:~ # step -version
+Smallstep CLI/0.17.2 (freebsd/amd64)
+Release Date: 2021-12-05 02:24 UTC
+```
 
 ### Where to from here?
 
