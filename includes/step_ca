@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# PROVIDE: step-ca
+# PROVIDE: step_ca
 # REQUIRE: LOGIN networking
 # KEYWORD: shutdown
 #
@@ -19,7 +19,7 @@
 
 . /etc/rc.subr
 
-name="step-ca"
+name="step_ca"
 rcvar="step_ca_enable"
 
 load_rc_config $name
