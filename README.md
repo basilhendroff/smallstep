@@ -28,11 +28,11 @@ DEFAULT_GW_IP="192.168.1.1"
 Many of the options are self-explanatory, and all should be adjusted to suit your needs, but only a few are mandatory. The mandatory options are:
 
 - JAIL_IP is the IP address for your jail. You can optionally add the netmask in CIDR notation (e.g., 192.168.1.199/24). If not specified, the netmask defaults to 24 bits. Values of less than 8 bits or more than 30 bits are invalid.
-- DEFAULT_GW_IP is the address for your default gateway
+- DEFAULT_GW_IP is the address for your default gateway.
 
 In addition, there are some other options which have sensible defaults, but can be adjusted if needed. These are:
 
-- JAIL_NAME: The name of the jail, defaults to "smallstep"
+- JAIL_NAME: The name of the jail, defaults to `smallstep`.
 - POOL_PATH: The path for your data pool. It is set automatically if left blank.
 - DATA_PATH: This is the path for SmallStep configuration and storage, defaults to `$POOL_PATH/apps/smallstep`. 
 - INTERFACE: The network interface to use for the jail. Defaults to `vnet0`.
