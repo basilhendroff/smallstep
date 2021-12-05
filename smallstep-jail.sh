@@ -138,5 +138,5 @@ echo
 print_msg "Ignore comments between the dashed lines above."
 echo
 print_msg "* The step-ca service runs as root:wheel."
-print_msg "* CA assets are stored in ${DB_PATH}/ca"
-print_msg "* The password required for the service to start is stored in ${DB_PATH}"
+print_msg "* CA assets are stored in ${DATA_PATH}/ca"
+print_msg "* The password required for the service to start is stored in ${DATA_PATH}"
