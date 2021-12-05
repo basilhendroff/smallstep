@@ -82,7 +82,7 @@ if [ ${DATA_PATH:0:1} != "/" ]; then
 fi
 DATA_PATH="${DATA_PATH%/}"
 
-DB_PATH=${DATA_PATH}/storage
+DB_PATH=${DATA_PATH}/assets
 
 
 #####
