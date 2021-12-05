@@ -86,9 +86,6 @@ if [ ${DATA_PATH:0:1} != "/" ]; then
 fi
 DATA_PATH="${DATA_PATH%/}"
 
-# DB_PATH=${DATA_PATH}/assets
-DB_PATH=${DATA_PATH}
-
 #####
 #
 # Jail Creation
@@ -117,9 +114,9 @@ rm /tmp/pkg.json
 # Directory Creation and Mounting
 #
 #####
-mkdir -p "${DB_PATH}"
+mkdir -p "${DATA_PATH}"
 iocage exec "${JAIL_NAME}" mkdir -p /var/db/step_ca
-iocage fstab -a "${JAIL_NAME}" "${DB_PATH}"  /var/db/step_ca  nullfs  rw  0  0
+iocage fstab -a "${JAIL_NAME}" "${DATA_PATH}"  /var/db/step_ca  nullfs  rw  0  0
 
 iocage exec "${JAIL_NAME}" mkdir -p /mnt/includes
 iocage fstab -a "${JAIL_NAME}" "${INCLUDES_PATH}" /mnt/includes nullfs rw 0 0
