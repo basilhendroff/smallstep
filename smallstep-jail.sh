@@ -122,7 +122,7 @@ iocage exec "${JAIL_NAME}" mkdir -p /mnt/includes
 iocage fstab -a "${JAIL_NAME}" "${INCLUDES_PATH}" /mnt/includes nullfs rw 0 0
 
 # Copy pre-written config files
-iocage exec "${JAIL_NAME}" cp /mnt/includes/step_ca /usr/local/etc/rc.d/
+iocage exec "${JAIL_NAME}" cp /mnt/includes/step-ca /usr/local/etc/rc.d/
 
 iocage exec "${JAIL_NAME}" sysrc step_ca_enable="YES"
 
