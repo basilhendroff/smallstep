@@ -86,6 +86,11 @@ if [ ${DATA_PATH:0:1} != "/" ]; then
 fi
 DATA_PATH="${DATA_PATH%/}"
 
+# Use latest rather than quarterly release
+
+iocage exec "${JAIL_NAME}" mkdir -p /usr/local/etc/pkg/repos
+iocage exec "${JAIL_NAME}" cp /mnt/includes/FreeBSD.conf /usr/local/etc/pkg/repos
+
 #####
 #
 # Jail Creation
@@ -123,6 +128,7 @@ iocage fstab -a "${JAIL_NAME}" "${INCLUDES_PATH}" /mnt/includes nullfs rw 0 0
 
 # Copy pre-written config files
 iocage exec "${JAIL_NAME}" cp /mnt/includes/step-ca /usr/local/etc/rc.d/
+iocage exec "${JAIL_NAME}" cp /mnt/includes/step-ca /usr/local/etc/rc.d/step-ca.mod
 
 iocage exec "${JAIL_NAME}" sysrc step_ca_enable="YES"
 
