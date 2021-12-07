@@ -1,0 +1,70 @@
+#!/bin/sh
+
+# PROVIDE: step_ca
+# REQUIRE: LOGIN networking
+# KEYWORD: shutdown
+#
+# To enable step-ca, add 'step_ca_enable="YES"' to /etc/rc.conf or
+# /etc/rc.conf.local
+
+# Optional settings:
+# step_ca_user (user):          User to run step_ca (root)
+# step_ca_group (group):        Group to run step_ca (wheel)
+# step_ca_stepdir (dir):        Root for step-ca storage
+#                               (/var/db/step_ca)
+# step_ca_steppath (dir):       Path for data and configs
+#                               (${step_ca_stepdir}/ca)
+# step_ca_password (path):      Password file path
+#                               (${step_ca_stepdir}/password.txt)
+
+. /etc/rc.subr
+
+name="step_ca"
+rcvar="step_ca_enable"
+
+load_rc_config $name
+: ${step_ca_enable:=no}
+: ${step_ca_user:=root}
+: ${step_ca_group:=wheel}
+: ${step_ca_stepdir:=/var/db/${name}}
+: ${step_ca_steppath:=${step_ca_stepdir}/ca}
+: ${step_ca_password:=${step_ca_stepdir}/password.txt}
+
+pidfile="/var/run/${name}/${name}.pid"
+step_ca_command="/usr/local/sbin/step-ca"
+step_ca_config="\
+        ${step_ca_steppath}/config/ca.json \
+        --password-file ${step_ca_password}"
+
+command="/usr/sbin/daemon"
+command_args="-S -c \
+                -P $pidfile \
+                -t $name \
+                -T $name \
+                $step_ca_command $step_ca_config"
+
+required_files="${step_ca_steppath}/config/ca.json ${step_ca_password}"
+
+start_precmd=step_ca_startprecmd
+start_postcmd=step_ca_postcmd
+
+step_ca_startprecmd()
+{
+        # Create required directories and set permissions
+        /usr/bin/install -d -m 755 -o "${step_ca_user}" -g "${step_ca_group}" ${step_ca_stepdir}
+        /usr/bin/install -d -m 700 -o "${step_ca_user}" -g "${step_ca_group}" ${step_ca_steppath}
+        /usr/bin/install -d -m 700 -o "${step_ca_user}" -g "${step_ca_group}" /var/run/${name}
+        
+        export STEPPATH=${step_ca_steppath}
+
+        if [ ! -e ${pidfile} ]; then
+                install -o ${step_ca_user} -g ${step_ca_group} /dev/null ${pidfile};
+        fi
+}
+
+step_ca_postcmd() {
+        sleep 2
+        run_rc_command status
+}
+
+run_rc_command "$1"
