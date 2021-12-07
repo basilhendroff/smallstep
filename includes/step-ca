@@ -54,34 +54,34 @@ start_postcmd=step_ca_postcmd
 
 step_ca_startprecmd()
 {
-    if checkyesno step_ca_init then;
-        if [ ! -e ${pidfile} ]; then
-                install -o ${step_ca_user} -g ${step_ca_group} /dev/null ${pidfile};
-        fi
+        if checkyesno step_ca_init; then
+            if [ ! -e ${pidfile} ]; then
+                    install -o ${step_ca_user} -g ${step_ca_group} /dev/null ${pidfile};
+            fi
 
-        if [ ! -e ${step_ca_steppath} ]; then
-                echo "No configured Step CA found."
-                echo "Creating new one...."
-                export STEPPATH=${step_ca_steppath}
-                /usr/local/bin/step ca init
-                chown -R ${step_ca_user}:${step_ca_group} ${step_ca_steppath}
-        fi
+            if [ ! -e ${step_ca_steppath} ]; then
+                    echo "No configured Step CA found."
+                    echo "Creating new one...."
+                    export STEPPATH=${step_ca_steppath}
+                    /usr/local/bin/step ca init
+                    chown -R ${step_ca_user}:${step_ca_group} ${step_ca_steppath}
+            fi
 
-        if [ ! -e ${step_ca_password} ]; then
-                echo "Step CA Password file for auto-start not found"
-                echo "Creating it...."
-                install -m 600 -o ${step_ca_user} -g ${step_ca_group} /dev/null ${step_ca_password}
-                echo "Please enter the Step CA Password:"
-                stty -echo; read passwd; stty echo; echo
-                echo $passwd > ${step_ca_password}
-        fi
+            if [ ! -e ${step_ca_password} ]; then
+                    echo "Step CA Password file for auto-start not found"
+                    echo "Creating it...."
+                    install -m 600 -o ${step_ca_user} -g ${step_ca_group} /dev/null ${step_ca_password}
+                    echo "Please enter the Step CA Password:"
+                    stty -echo; read passwd; stty echo; echo
+                    echo $passwd > ${step_ca_password}
+            fi
 
-        if [ -e ${step_ca_steppath}/config/ca.json ]; then
-                configured_port=$(sed -n -e '/"address"/ s/.*:\(.*\)".*/\1/p' ${step_ca_steppath}/config/ca.json)
-                if [ ${configured_port} -lt 1024 ]; then
-                        echo "Privileged Port (${configured_port}) configured: cannot run as ${step_ca_user}"
-                fi
-        fi
+            if [ -e ${step_ca_steppath}/config/ca.json ]; then
+                    configured_port=$(sed -n -e '/"address"/ s/.*:\(.*\)".*/\1/p' ${step_ca_steppath}/config/ca.json)
+                    if [ ${configured_port} -lt 1024 ]; then
+                            echo "Privileged Port (${configured_port}) configured: cannot run as ${step_ca_user}"
+                    fi
+            fi
     else
     fi
 }
