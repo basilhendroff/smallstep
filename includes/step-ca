@@ -54,6 +54,8 @@ step_ca_startprecmd()
         /usr/bin/install -d -m 755 -o "${step_ca_user}" -g "${step_ca_group}" ${step_ca_stepdir}
         /usr/bin/install -d -m 700 -o "${step_ca_user}" -g "${step_ca_group}" ${step_ca_steppath}
         /usr/bin/install -d -m 700 -o "${step_ca_user}" -g "${step_ca_group}" /var/run/${name}
+        
+        export STEPPATH=${step_ca_steppath}
 
         if [ ! -e ${pidfile} ]; then
                 install -o ${step_ca_user} -g ${step_ca_group} /dev/null ${pidfile};
