@@ -88,6 +88,9 @@ DATA_PATH="${DATA_PATH%/}"
 
 # Use latest rather than quarterly release
 
+iocage exec "${JAIL_NAME}" mkdir -p /mnt/includes
+iocage fstab -a "${JAIL_NAME}" "${INCLUDES_PATH}" /mnt/includes nullfs rw 0 0
+
 iocage exec "${JAIL_NAME}" mkdir -p /usr/local/etc/pkg/repos
 iocage exec "${JAIL_NAME}" cp /mnt/includes/FreeBSD.conf /usr/local/etc/pkg/repos
 
@@ -122,9 +125,6 @@ rm /tmp/pkg.json
 mkdir -p "${DATA_PATH}"
 iocage exec "${JAIL_NAME}" mkdir -p /var/db/step_ca
 iocage fstab -a "${JAIL_NAME}" "${DATA_PATH}"  /var/db/step_ca  nullfs  rw  0  0
-
-iocage exec "${JAIL_NAME}" mkdir -p /mnt/includes
-iocage fstab -a "${JAIL_NAME}" "${INCLUDES_PATH}" /mnt/includes nullfs rw 0 0
 
 # Copy pre-written config files
 iocage exec "${JAIL_NAME}" cp /mnt/includes/step-ca /usr/local/etc/rc.d/
