@@ -60,12 +60,12 @@ start_postcmd=step_ca_postcmd
 
 step_ca_startprecmd()
 {
-        if [ ! -e ${pidfile} ]; then
-                install -o ${step_ca_user} -g ${step_ca_group} /dev/null ${pidfile};
-        fi
-
         if checkyesno step_ca_init; then
-                if [ ! -e ${step_ca_steppath} ]; then
+                if [ ! -e ${pidfile} ]; then
+                        install -o ${step_ca_user} -g ${step_ca_group} /dev/null ${pidfile};
+                fi
+
+        if [ ! -e ${step_ca_steppath} ]; then
                         echo "No configured Step CA found."
                         echo "Creating new one...."
                         export STEPPATH=${step_ca_steppath}
@@ -95,6 +95,10 @@ step_ca_startprecmd()
                 /usr/bin/install -d -m 700 -o "${step_ca_user}" -g "${step_ca_group}" /var/run/${name}
 
                 export STEPPATH=${step_ca_steppath}
+
+                if [ ! -e ${pidfile} ]; then
+                        install -o ${step_ca_user} -g ${step_ca_group} /dev/null ${pidfile};
+                fi
         fi
 }
 
