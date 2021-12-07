@@ -36,7 +36,13 @@ load_rc_config $name
 : ${step_ca_password:=${step_ca_stepdir}/password.txt}
 : ${step_ca_init:=yes}
 
-pidfile="/var/run/${name}/${name}.pid"
+if checkyesno step_ca_init; then
+        pidfile="/var/run/${name}.pid"
+else
+        pidfile="/var/run/${name}/${name}.pid"
+        required_files="${step_ca_steppath}/config/ca.json ${step_ca_password}"
+fi
+
 step_ca_command="/usr/local/sbin/step-ca"
 step_ca_config="\
         ${step_ca_steppath}/config/ca.json \
@@ -54,16 +60,11 @@ start_postcmd=step_ca_postcmd
 
 step_ca_startprecmd()
 {
-        # Create required directories and set permissions
-        /usr/bin/install -d -m 755 -o "${step_ca_user}" -g "${step_ca_group}" ${step_ca_stepdir}
-        /usr/bin/install -d -m 700 -o "${step_ca_user}" -g "${step_ca_group}" ${step_ca_steppath}
-        /usr/bin/install -d -m 700 -o "${step_ca_user}" -g "${step_ca_group}" /var/run/${name}
+        if [ ! -e ${pidfile} ]; then
+                install -o ${step_ca_user} -g ${step_ca_group} /dev/null ${pidfile};
+        fi
 
         if checkyesno step_ca_init; then
-                if [ ! -e ${pidfile} ]; then
-                    install -o ${step_ca_user} -g ${step_ca_group} /dev/null ${pidfile};
-                fi
-
                 if [ ! -e ${step_ca_steppath} ]; then
                         echo "No configured Step CA found."
                         echo "Creating new one...."
@@ -88,6 +89,12 @@ step_ca_startprecmd()
                         fi
                 fi
         else
+                # Create required directories and set permissions
+                /usr/bin/install -d -m 755 -o "${step_ca_user}" -g "${step_ca_group}" ${step_ca_stepdir}
+                /usr/bin/install -d -m 700 -o "${step_ca_user}" -g "${step_ca_group}" ${step_ca_steppath}
+                /usr/bin/install -d -m 700 -o "${step_ca_user}" -g "${step_ca_group}" /var/run/${name}
+
+                export STEPPATH=${step_ca_steppath}
         fi
 }
 
