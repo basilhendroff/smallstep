@@ -126,6 +126,10 @@ iocage exec "${JAIL_NAME}" cp /mnt/includes/step-ca /usr/local/etc/rc.d/
 iocage exec "${JAIL_NAME}" cp /mnt/includes/step-ca /usr/local/etc/rc.d/step-ca.mod
 
 iocage exec "${JAIL_NAME}" sysrc step_ca_enable="YES"
+iocage exec "${JAIL_NAME}" sysrc step_ca_user="step"
+iocage exec "${JAIL_NAME}" sysrc step_ca_group="step"
+iocage exec "${JAIL_NAME}" sysrc step_ca_stepdir="/var/db/step_ca"
+iocage exec "${JAIL_NAME}" sysrc step_ca_init="YES"
 
 # Set up the STEPPATH environmental variable
 iocage exec "${JAIL_NAME}" 'echo "setenv STEPPATH /var/db/step_ca/ca" >> /etc/csh.cshrc'
